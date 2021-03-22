@@ -20,6 +20,8 @@ services:
       - traefik
     ports:
       - '8086:8086'
+    env_file:
+      - ./.env
    labels:
       - "traefik.enable=true"
       - "traefik.docker.network=traefik"
@@ -46,6 +48,8 @@ services:
       - '127.0.0.1:8888:8888'
     depends_on:
       - influxdb
+    env_file:
+      - ./.env
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=traefik"
@@ -71,6 +75,8 @@ services:
       - traefik
     ports:
       - '3000:3000'
+    env_file:
+      - ./.env
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=traefik"
