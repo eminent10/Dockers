@@ -1,0 +1,45 @@
+version: "3.3"
+
+networks:
+  traefik:
+    external: true
+
+volumes:
+  GRAFANA:
+  INFLUXDB:
+  CHRONOGRAF:
+
+services:
+  influxdb:
+    build: influxdb_dockerfile/.
+    image: eminent/influxdb:latest
+    container_name: influxdb
+    volumes:
+      - INFLUXDB:/var/lib/influxdb
+    networks:
+      - traefik
+    ports:
+      - '8086:8086'
+  chronograf:
+    build: chronograf_dockerfile/.
+    image: eminent/chronograf
+    container_name: chronograf
+    volumes:
+      - CHRONOGRAF:/var/lib/chronograf
+    networks:
+      - traefik
+    ports:
+      - '127.0.0.1:8888:8888'
+    depends_on:
+      - influxdb
+  grafana:
+    build: grafana_dockerfile/. 
+    image: eminent/grafana:latest
+    container_name: grafana
+    restart: always
+    volumes:
+      - GRAFANA:/var/lib/grafana
+    networks:
+      - traefik
+    ports:
+      - '3000:3000'
