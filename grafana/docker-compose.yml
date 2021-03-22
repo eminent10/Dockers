@@ -20,6 +20,20 @@ services:
       - traefik
     ports:
       - '8086:8086'
+   labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik"
+      - "traefik.http.routers.influxdb.rule=(`influxdb.mon.local`)"
+      - "traefik.http.routers.influxdb.entrypoints=web"
+      - "traefik.http.services.influxdb.loadbalancer.server.port=8086"
+      - "traefik.http.services.influxdb.loadbalancer.server.scheme=http"
+      - "traefik.http.services.influxdb.loadbalancer.passHostHeader=true"
+      - "traefik.frontend.headers.STSSeconds=315360000"
+      - "traefik.frontend.headers.browserXSSFilter=true"
+      - "traefik.frontend.headers.contentTypeNosniff=true"
+      - "traefik.frontend.headers.forceSTSHeader=true"
+      - "traefik.frontend.headers.STSIncludeSubdomains=true"
+      - "traefik.frontend.headers.STSPreload=true"
   chronograf:
     build: chronograf_dockerfile/.
     image: eminent/chronograf
@@ -32,6 +46,20 @@ services:
       - '127.0.0.1:8888:8888'
     depends_on:
       - influxdb
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik"
+      - "traefik.http.routers.cronograf.rule=(`cronofrag.mon.local`)"
+      - "traefik.http.routers.cronograf.entrypoints=web"
+      - "traefik.http.services.chronograf.loadbalancer.server.port=8888"
+      - "traefik.http.services.chronograf.loadbalancer.server.scheme=http"
+      - "traefik.http.services.chronograf.loadbalancer.passHostHeader=true"
+      - "traefik.frontend.headers.STSSeconds=315360000"
+      - "traefik.frontend.headers.browserXSSFilter=true"
+      - "traefik.frontend.headers.contentTypeNosniff=true"
+      - "traefik.frontend.headers.forceSTSHeader=true"
+      - "traefik.frontend.headers.STSIncludeSubdomains=true"
+      - "traefik.frontend.headers.STSPreload=true"
   grafana:
     build: grafana_dockerfile/. 
     image: eminent/grafana:latest
@@ -43,3 +71,17 @@ services:
       - traefik
     ports:
       - '3000:3000'
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik"
+      - "traefik.http.routers.grafana.rule=(`grafna.mon.local`)"
+      - "traefik.http.routers.grafana.entrypoints=web"
+      - "traefik.http.services.grafana.loadbalancer.server.port=3000"
+      - "traefik.http.services.grafana.loadbalancer.server.scheme=http"
+      - "traefik.http.services.grafana.loadbalancer.passHostHeader=true"
+      - "traefik.frontend.headers.STSSeconds=315360000"
+      - "traefik.frontend.headers.browserXSSFilter=true"
+      - "traefik.frontend.headers.contentTypeNosniff=true"
+      - "traefik.frontend.headers.forceSTSHeader=true"
+      - "traefik.frontend.headers.STSIncludeSubdomains=true"
+      - "traefik.frontend.headers.STSPreload=true"
